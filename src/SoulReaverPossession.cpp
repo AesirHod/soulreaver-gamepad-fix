@@ -6,13 +6,14 @@ long* RazielCommands = reinterpret_cast<long*>(0x004FAD90);
 Camera& theCamera = *reinterpret_cast<Camera*>(0x00C64560);
 short& theCamera_LagZ = *reinterpret_cast<short*>(0x00C6465C);
 _Instance* Raziel_Possessed = NULL;
+unsigned long Raziel_possessedCheckMask = 0;
 _Instance*& gameTrackerX_playerInstance = *reinterpret_cast<_Instance**>(0x00C66D4C);
-_Instance*& gameTrackerX_instanceList_first = *reinterpret_cast<_Instance**>(0);
-short& gameTrackerX_gameData_asmData_MorphType = *reinterpret_cast<short*>(0);
+_InstanceList*& gameTrackerX_instanceList = *reinterpret_cast<_InstanceList**>(0x00C66D54);
+short& gameTrackerX_gameData_asmData_MorphType = *reinterpret_cast<short*>(0x00C66D2A);
 unsigned long& Raziel_Senses_EngagedMask = *reinterpret_cast<unsigned long*>(0);
 __EngagedInstance*& Raziel_Senses_EngagedList = *reinterpret_cast<__EngagedInstance**>(0);
 
-inline int INSTANCE_Post(struct _Instance* Inst, int Message, int Data)
+inline __declspec(naked) int INSTANCE_Post(struct _Instance* Inst, int Message, int Data)
 {
 	__asm
 	{
@@ -21,7 +22,7 @@ inline int INSTANCE_Post(struct _Instance* Inst, int Message, int Data)
 	}
 }
 
-inline int INSTANCE_Query(struct _Instance* Inst, int Query)
+inline __declspec(naked) int INSTANCE_Query(struct _Instance* Inst, int Query)
 {
 	__asm
 	{
@@ -30,7 +31,7 @@ inline int INSTANCE_Query(struct _Instance* Inst, int Query)
 	}
 }
 
-int INSTANCE_InPlane(struct _Instance* instance, int plane)
+inline __declspec(naked) int INSTANCE_InPlane(struct _Instance* instance, int plane)
 {
 	__asm
 	{
@@ -39,7 +40,7 @@ int INSTANCE_InPlane(struct _Instance* instance, int plane)
 	}
 }
 
-void CAMERA_SetInstanceFocus(struct Camera* camera, struct _Instance *instance)
+inline __declspec(naked) void CAMERA_SetInstanceFocus(struct Camera* camera, struct _Instance *instance)
 {
 	__asm
 	{
@@ -48,7 +49,7 @@ void CAMERA_SetInstanceFocus(struct Camera* camera, struct _Instance *instance)
 	}
 }
 
-inline int GetControllerInput(int* ZDirection, long* controlCommand)
+inline __declspec(naked) int GetControllerInput(int* ZDirection, long* controlCommand)
 {
 	__asm
 	{
@@ -57,7 +58,7 @@ inline int GetControllerInput(int* ZDirection, long* controlCommand)
 	}
 }
 
-void MONAPI_PossessNext()
+__declspec(dllexport) void MONAPI_PossessNext()
 {
 	struct _Instance* Inst;
 
@@ -70,7 +71,7 @@ void MONAPI_PossessNext()
 
 	if (!Inst)
 	{
-		Inst = gameTrackerX_instanceList_first;
+		Inst = gameTrackerX_instanceList->first;
 	}
 
 	if (Inst == Raziel_Possessed)
@@ -84,7 +85,7 @@ void MONAPI_PossessNext()
 		Inst = Inst->next;
 		if (!Inst)
 		{
-			Inst = gameTrackerX_instanceList_first;
+			Inst = gameTrackerX_instanceList->first;
 		}
 
 		if (Inst == Raziel_Possessed)
@@ -100,19 +101,33 @@ void MONAPI_PossessNext()
 
 	CAMERA_SetInstanceFocus(&theCamera, Inst);
 
+	// Default checkmask = 0x803E002E - See InitStates
+
 	if (Inst == gameTrackerX_playerInstance)
 	{
 		INSTANCE_Post(gameTrackerX_playerInstance, 0x01000010, 0);
+		//gameTrackerX_playerInstance->checkMask = 0x803E002E;
+		//gameTrackerX_playerInstance->flags2 |= 0x00000400;
+		//Raziel_Possessed->checkMask = Raziel_possessedCheckMask;
+		//Raziel_Possessed = NULL;
 	}
 	else
 	{
 		if (Raziel_Possessed != gameTrackerX_playerInstance)
 		{
 			INSTANCE_Post(Raziel_Possessed, 0x01000010, 0);
+			//((_MonsterVars*)Raziel_Possessed->extraData)->mvFlags &= 0xFFF7FFFB;
 		}
 
 		INSTANCE_Post(Inst, 0x0100000F, 0);
+		//((_MonsterVars*)Inst->extraData)->mvFlags |= 0x00080004;
+
 		INSTANCE_Post(gameTrackerX_playerInstance, 0x0100000F, (int)Inst);
+		//Raziel_Possessed = Inst;
+		//gameTrackerX_playerInstance->checkMask = 0;
+		//gameTrackerX_playerInstance->flags2 &= 0xFFFFFBFF;
+		//Raziel_possessedCheckMask = Raziel_Possessed->checkMask;
+		//Raziel_Possessed->checkMask |= 0x00000020;
 	}
 
 	Raziel_Possessed = Inst;

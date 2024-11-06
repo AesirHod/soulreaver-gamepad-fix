@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SoulReaverDebugMenu.h"
+#include "SoulReaverPossession.h"
 
 typedef unsigned char byte;
 typedef unsigned char uchar;
@@ -52,6 +53,7 @@ DebugMenuLine debugImbueSoulReaverMenu[] = {
 	{	DEBUG_LINE_TYPE_BIT,		0,	0,	"Sound Reaver",		debugRazielFlags2,			0x00020000	},
 	{	DEBUG_LINE_TYPE_BIT,		0,	0,	"Ariel Reaver",		debugRazielFlags2,			0x00001000	},
 	{	DEBUG_LINE_TYPE_BIT,		0,	0,	"Kain Reaver",		debugRazielFlags2,			0x00010000	},
+	{	DEBUG_LINE_TYPE_ACTION,		0,	0,	"Possess Next",		(long*)/*0x0040c470*/MONAPI_PossessNext,			0x00000000,	},
 	{	DEBUG_LINE_TYPE_ENDLIST,	0,	0,	endOfMenu,			gameTrackerX_debugFlags,	0x00000000	}
 };
 

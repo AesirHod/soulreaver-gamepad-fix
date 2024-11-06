@@ -2,13 +2,14 @@
 
 #include "SoulReaverStructures.h"
 
-extern __Player& Raziel;
+//extern __Player& Raziel;
 extern long* RazielCommands;
 extern Camera& theCamera;
 extern short& theCamera_LagZ;
 extern _Instance* Raziel_Possessed;
+extern unsigned long Raziel_possessedCheckMask;
 extern _Instance*& gameTrackerX_playerInstance;
-extern _Instance*& gameTrackerX_instanceList_first;
+extern _InstanceList*& gameTrackerX_instanceList;
 extern short& gameTrackerX_gameData_asmData_MorphType;
 extern unsigned long& Raziel_Senses_EngagedMask;
 extern __EngagedInstance*& Raziel_Senses_EngagedList;
@@ -27,4 +28,5 @@ extern __EngagedInstance*& Raziel_Senses_EngagedList;
 	 16
 };*/
 
-void __stdcall ProcessMovementPossessed(long* controlCommand, struct GameTracker* GT);
+__declspec(dllexport) void MONAPI_PossessNext();
+__declspec(dllexport) void __stdcall ProcessMovementPossessed(long* controlCommand, struct GameTracker* GT);
