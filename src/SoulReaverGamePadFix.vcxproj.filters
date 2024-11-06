@@ -27,6 +27,15 @@
     <ClInclude Include="SoulReaverGamePadFix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SoulReaverDebugMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SoulReaverPossession.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SoulReaverStructures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -36,6 +45,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SoulReaverDebugMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SoulReaverPossession.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

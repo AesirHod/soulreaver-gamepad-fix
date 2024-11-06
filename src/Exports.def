@@ -2,7 +2,7 @@ EXPORTS
 DirectInputCreateA=__E__0__
 DirectInputCreateEx=__E__1__
 DirectInputCreateW=__E__2__
-DllCanUnloadNow=__E__3__
-DllGetClassObject=__E__4__
-DllRegisterServer=__E__5__
-DllUnregisterServer=__E__6__
+DllCanUnloadNow=__E__3__ PRIVATE
+DllGetClassObject=__E__4__ PRIVATE
+DllRegisterServer=__E__5__ PRIVATE
+DllUnregisterServer=__E__6__ PRIVATE
