@@ -1068,7 +1068,7 @@ void InitializeXInput()
 
 __declspec(dllexport) void Initialize()
 {
-	//InitializeDebugMenu();
+	InitializeDebugMenu();
 
 	WriteToAddress(0x0047AF01, DialogProc); // Setup Dialog Function
 	WriteToAddress(0x0047AF0D, (char)102);  // Setup Dialog ID
