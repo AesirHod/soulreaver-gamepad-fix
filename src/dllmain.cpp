@@ -735,50 +735,6 @@ __declspec(dllexport) void WINAPIV FX_Draw_Glowing_LineWS(unsigned long** ot, lo
 	reinterpret_cast<DVECTOR*>((int)nextPrim + 0x44)->vy += centreY;
 }
 
-extern "C" __declspec(naked) void __stdcall SetStatesMod()
-{
-	__asm
-	{
-		mov eax, [0x00C66D4C]; // gameTrackerX.playerInstance
-		mov ecx, [eax + 0x14]; // gameTrackerX.playerInstance->flags
-		test ch, 0x01;
-		jne SetStatesNone;
-		mov eax, Raziel_Possessed;	
-		test eax, eax;		
-		jne SetStatesPossessed;
-//SetStatesRaziel:
-		mov eax, 0x00453157; // if ((ControlFlag & 0x800000))
-		jmp eax;
-SetStatesPossessed:
-		call ProcessMovementPossessed;
-		nop;
-SetStatesNone:
-		mov eax, 0x004538DE; // razSetPlayerEvent();
-		jmp eax;
-	}
-
-	// PSX
-	// if (!(gameTrackerX.playerInstance->flags & 0x100))
-	// PC
-	// v9 = *(dword_C66D4C + 20);
-	// if ( BYTE1(v9) & 1 )
-	// goto LABEL_130; // 0x004538DE - razSetPlayerEvent
-
-	// PSX
-	// if ((ControlFlag & 0x800000))
-	// else GetControllerMessages(controlCommand);
-	// PC
-	// if (&unk_800000 & ControlFlag) // 0x00453157 - NoMovement?
-	// else // 0x00453192 - GetControllerMessages
-
-	// PSX
-	// while ((message = DeMessageQueue(&Raziel.padCommands)) != NULL)
-	// PC
-	// v11 = DeMessageQueue(&unk_B08898); // 0x004532CF
-
-	// PC sub_454050 - GetControllerInput
-}
-
 __declspec(dllexport) INT_PTR CALLBACK DialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	const int DLG_OK_BUTTON = 1;
